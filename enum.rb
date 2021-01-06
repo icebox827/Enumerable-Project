@@ -46,18 +46,13 @@ module Enumerable
     true
   end
 
-  def my_any?(args = nil)
-    if block_given?
+  def my_any?(*args)
+    if !args[0].nil?
+      my_each { |element| return true if args[0] === element }
+    elsif block_given?
       my_each { |element| return true if yield(element) }
-      false
-    elsif args.nil?
-      my_each { |element| return true if n.nil? || element == true }
-    elsif !args.nil? && (args.is_a? Class)
-      my_each { |element| return true if element.instance_of?(args) }
-    elsif !args.nil? && args.instance_of?(Regexp)
-      my_each { |element| return true if args.match(element) }
     else
-      my_each { |element| return true if element == args }
+      my_each { |element| return true if element }
     end
     false
   end
