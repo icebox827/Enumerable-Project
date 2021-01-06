@@ -13,7 +13,9 @@ Get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-- Text editor
+- VS Code
+- Notepad ++
+- repl.it
 - Browser
 
 ### Usage
