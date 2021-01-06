@@ -15,15 +15,14 @@ module Enumerable
   end
 
   def my_each_with_index
-    return to_enum(:my_each_with_index) unless block_given?
-
-    arr = instance_of?(Array) ? self : to_a
-    count = 0
-    while count < arr.length
-      yield(arr[count], count)
-      count += 1
+    if block_given?
+      size.times do |i|
+        is_a?(Range) ? yield(min + i, i) : yield(self[i], i)
+      end
+      self
+    else
+      to_enum
     end
-    arr
   end
 
   def my_select
