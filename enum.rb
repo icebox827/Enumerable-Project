@@ -5,8 +5,8 @@
 module Enumerable
   def my_each
     if block_given?
-      size.times do |i|
-        is_a?(Range) ? yield(min + i) : yield(self[i])
+      size.times do |element|
+        is_a?(Range) ? yield(min + element) : yield(self[element])
       end
       self
     else
@@ -16,8 +16,8 @@ module Enumerable
 
   def my_each_with_index
     if block_given?
-      size.times do |i|
-        is_a?(Range) ? yield(min + i, i) : yield(self[i], i)
+      size.times do |element|
+        is_a?(Range) ? yield(min + element, element) : yield(self[element], element)
       end
       self
     else
