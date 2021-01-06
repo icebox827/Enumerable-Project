@@ -89,28 +89,23 @@ module Enumerable
     list_arr
   end
 
-  def my_inject(num = nil, sym = nil)
-    if block_given?
-      acc = num
-      my_each do |element|
-        acc = acc.nil? ? element : yield(acc, element)
+  def my_inject(param1 = nil, param2 = nil)
+    return raise LocalJumpError, 'Expecting a block or any argument' if !block_given? && param1.nil? && param2.nil?
+
+    if !block_given?
+      if param2.nil?
+        param2 = param1
+        param1 = nil
       end
-      acc
-    elsif !num.nil? && (num.is_a?(Symbol) || num.is_a?(String))
-      acc = nil
-      my_each do |element|
-        acc = acc.nil? ? element : acc.send(num, element)
-      end
-      acc
-    elsif !sym.nil? && (sym.is_a?(Symbol) || sym.is_a?(String))
-      acc = num
-      my_each do |element|
-        acc = acc.nil? ? element : acc.send(sym, element)
-      end
-      acc
+      opp.to_sym
+      my_each { |i| param1 = param1.nil? ? i : param1.send(param2, i) }
+    else
+      my_each { |i| param1 = param1.nil? ? i : yield(param1, i) }
     end
+    acc
   end
 end
+
 
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/PerceivedComplexity
