@@ -97,12 +97,12 @@ module Enumerable
         param2 = param1
         param1 = nil
       end
-      opp.to_sym
+      param2.to_sym
       my_each { |i| param1 = param1.nil? ? i : param1.send(param2, i) }
     else
       my_each { |i| param1 = param1.nil? ? i : yield(param1, i) }
     end
-    acc
+    param1
   end
 end
 
