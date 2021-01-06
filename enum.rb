@@ -16,13 +16,13 @@ module Enumerable
   end
 
   def my_each_with_index
-    return to_enum(:my_each) unless block_given?
+    return to_enum(:my_each_with_index) unless block_given?
 
-    arr = to_a
-    counter = 0
-    while counter < arr.length
-      yield(arr[counter], counter)
-      counter += 1
+    arr = instance_of?(Array) ? self : to_a
+    count = 0
+    while count < arr.length
+      yield(arr[count], count)
+      count += 1
     end
     arr
   end
