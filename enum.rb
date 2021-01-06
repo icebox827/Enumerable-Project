@@ -39,12 +39,12 @@ module Enumerable
     if block_given?
       my_each { |element| return false if yield(element) == false }
       return true
-    elsif arg.nil?
+    elsif args.nil?
       my_each { |element| return false if n.nil? || element == false }
-    elsif !arg.nil? && (args.is_a? Class)
+    elsif !args.nil? && (args.is_a? Class)
       my_each { |element| return false if element.class != args }
-    elsif !arg.nil? && args.instance_of?(Regexp)
-      my_each { |element| return false unless arg.match(element) }
+    elsif !args.nil? && args.instance_of?(Regexp)
+      my_each { |element| return false unless args.match(element) }
     else
       my_each { |element| return false if element != args }
     end
@@ -55,50 +55,35 @@ module Enumerable
     if block_given?
       my_each { |element| return true if yield(element) }
       false
-    elsif arg.nil?
+    elsif args.nil?
       my_each { |element| return true if n.nil? || element == true }
-    elsif !arg.nil? && (args.is_a? Class)
+    elsif !args.nil? && (args.is_a? Class)
       my_each { |element| return true if element.instance_of?(args) }
-    elsif !arg.nil? && args.instance_of?(Regexp)
-      my_each { |element| return true if arg.match(element) }
+    elsif !args.nil? && args.instance_of?(Regexp)
+      my_each { |element| return true if args.match(element) }
     else
       my_each { |element| return true if element == args }
     end
     false
   end
 
-  def my_none(args = nil)
-    if !block_given? && args.nil?
-      my_each { |num| return true if num }
-      return false
-    end
-
-    if !block_given? && !args.nil?
-
-      if args.is_a?(Class)
-        my_each { |num| return false if num.instance_of?(args) }
-        return true
-      end
-
-      if args.instance_of?(Regexp)
-        my_each { |num| return false if args.match(num) }
-        return true
-      end
-
-      my_each { |num| return false if num == args }
-      return true
-    end
-
-    my_any? { |num| return false if yield(num) }
-    true
+  def my_none?(arg = nil, &block)
+    !my_any?(arg, &block)
   end
 
-  def my_count(num)
-    arr = instance_of?(Array) ? self : to_a
-    return arr.length unless block_given? || num
-    return arr.my_select { |item| item == num }.length if num
-
-    arr.my_select { |item| yield(item) }.length
+  def my_count(arg = nil)
+    count = 0
+    my_each do |element|
+      if args
+        count += 1 if element == args
+        count += 1 if args.is_a?(Regexp) && element.match?(args)
+      elsif block_given?
+        count += 1 if yield(element)
+      else
+        count += 1
+      end
+    end
+    count
   end
 
   def my_map(proc_ = nil)
