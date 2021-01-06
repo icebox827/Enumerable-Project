@@ -30,13 +30,9 @@ module Enumerable
   def my_select
     return to_enum(:my_select) unless block_given?
 
-    list = []
-
-    arr.my_each | filter |
-      if filter != 'accepted'
-        list.push(filter)
-        yield filter
-      end
+    new_arr = []
+    my_each { |element| new_arr << element if yield(element) }
+    new_arr
   end
 
   def my_all?(args = nil)
