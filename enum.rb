@@ -1,6 +1,6 @@
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/PerceivedComplexity
-# rubocop:disable Metrics/ModuleLength
+# rubocop:disable Style/CaseEquality
 
 module Enumerable
   def my_each
@@ -35,18 +35,13 @@ module Enumerable
     new_arr
   end
 
-  def my_all?(args = nil)
-    if block_given?
-      my_each { |element| return false if yield(element) == false }
-      return true
-    elsif args.nil?
-      my_each { |element| return false if n.nil? || element == false }
-    elsif !args.nil? && (args.is_a? Class)
-      my_each { |element| return false if element.class != args }
-    elsif !args.nil? && args.instance_of?(Regexp)
-      my_each { |element| return false unless args.match(element) }
+  def my_all?(*args)
+    if !args[0].nil?
+      my_each { |element| return false unless args[0] === element }
+    elsif block_given?
+      my_each { |element| return false unless yield(element) }
     else
-      my_each { |element| return false if element != args }
+      my_each { |element| return false unless element }
     end
     true
   end
@@ -67,11 +62,11 @@ module Enumerable
     false
   end
 
-  def my_none?(arg = nil, &block)
-    !my_any?(arg, &block)
+  def my_none?(args = nil, &block)
+    !my_any?(args, &block)
   end
 
-  def my_count(arg = nil)
+  def my_count(args = nil)
     count = 0
     my_each do |element|
       if args
@@ -124,7 +119,8 @@ end
 
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/PerceivedComplexity
-# rubocop:enable Metrics/ModuleLength
+# rubocop:enable Style/CaseEquality
+
 
 def multiply_els(arr)
   arr.my_inject(:*)
