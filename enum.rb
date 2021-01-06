@@ -106,11 +106,9 @@ module Enumerable
   end
 end
 
-
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Style/CaseEquality
-
 
 def multiply_els(arr)
   arr.my_inject(:*)
